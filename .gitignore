@@ -1,0 +1,14 @@
+lib/debug
+lib/release
+Debug
+*.suo
+*.user
+obj
+bin
+/build/
+*.exe
+!.paket/paket.bootstrapper.exe
+.ionide/
+.fake
+.idea/
+.DS_Store
