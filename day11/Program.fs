@@ -54,6 +54,7 @@ let solve f n (monkeys0: Map<int,Monkey>) =
 // Analyzing
 let analyze = Map.values >> Seq.sortDescending >> (fun s -> (Seq.item 0 s) * (Seq.item 1 s))
 let run f n = parseInput >> solve f n >> analyze
+// Solutions
 let solution1 = run containWorry1 20 file
 let solution2 = run containWorry2 10000 file
 printfn $"%A{solution1}"
