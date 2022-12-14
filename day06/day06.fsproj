@@ -3,11 +3,12 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>day6</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="input.txt" />
         <Compile Include="Program.fs" />
+        <Content Include="input.txt" />
     </ItemGroup>
 
     <ItemGroup>
