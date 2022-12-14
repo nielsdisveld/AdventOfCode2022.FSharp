@@ -25,7 +25,9 @@ let toMap = Seq.mapi (fun i m -> i,m) >> Map.ofSeq
 let parseInput = FileReading.readLines >> Seq.fold parseLine [] >> Seq.rev >> toMap
 // Solving
 let containWorry1 _ i = i / 3L
-let containWorry2 m i = i % m
+let containWorry2 (monkeys: Map<int,Monkey>) i =
+    let commonProd = monkeys |> Seq.map (fun m -> m.Value.Test) |> Seq.reduce (*)
+    i % commonProd
 let setVal i = function | Old -> i | Val j -> j
 let updateWorry i (val1, op, val2) =
     match op with
@@ -37,8 +39,7 @@ let removeItems (monkey: Monkey) = { monkey with Items = [] }
 let solve f n (monkeys0: Map<int,Monkey>) =
     let mutable monkeys = monkeys0
     let mutable inspected = monkeys.Keys |> Seq.map (fun i -> i,0L) |> Map.ofSeq
-    let commonProd = monkeys |> Seq.map (fun kv -> kv.Value.Test) |> Seq.reduce (*)
-    let containWorry = f commonProd
+    let containWorry = f monkeys
     for _ in [0..n-1] do
         for i in monkeys.Keys do
             let monkey = monkeys[i]
@@ -53,8 +54,8 @@ let solve f n (monkeys0: Map<int,Monkey>) =
     inspected
 // Analyzing
 let analyze = Map.values >> Seq.sortDescending >> (fun s -> (Seq.item 0 s) * (Seq.item 1 s))
-let run f n = parseInput >> solve f n >> analyze
 // Solutions
+let run f n = parseInput >> solve f n >> analyze
 let solution1 = run containWorry1 20 file
 let solution2 = run containWorry2 10000 file
 printfn $"%A{solution1}"
