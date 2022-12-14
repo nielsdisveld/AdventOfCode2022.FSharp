@@ -9,4 +9,3 @@ module Seq =
     let actOnRev f = Seq.rev >>  f >> Seq.rev
     let actOnTranspose f = Seq.transpose >> f >> Seq.transpose
     let pointWise f (inp: seq<seq<_>>) = inp |> Seq.map2 (Seq.map2 f)
-
