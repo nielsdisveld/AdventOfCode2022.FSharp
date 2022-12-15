@@ -34,7 +34,7 @@ let updateWorry i (val1, op, val2) =
     | "*" -> (setVal i val1) * (setVal i val2)
     | "+" -> (setVal i val1) + (setVal i val2)
     | x -> failwith $"Incorrect operator: %s{x}"
-let addItem (monkey: Monkey) i = { monkey with Items = List.append monkey.Items [i] }
+let addItem (monkey: Monkey) i = { monkey with Items = monkey.Items @ [i] }
 let removeItems (monkey: Monkey) = { monkey with Items = [] }
 let solve f n (monkeys0: Map<int,Monkey>) =
     let mutable monkeys = monkeys0
