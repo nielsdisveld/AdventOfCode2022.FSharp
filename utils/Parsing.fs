@@ -18,5 +18,5 @@ module Parsing =
         |> String.Concat
     let rmvNonInts (str: string) =        
         str
-        |> Seq.filter (fun n -> List.contains n ['0';'1';'2';'3';'4';'5';'6';'7';'8';'9'])
+        |> Seq.filter (fun n -> List.contains n ['0'..'9'])
         |> String.Concat
