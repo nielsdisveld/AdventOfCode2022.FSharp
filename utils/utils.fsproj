@@ -10,6 +10,7 @@
         <Compile Include="FileReading.fs" />
         <Compile Include="Parsing.fs" />
         <Compile Include="Seq.fs" />
+        <Compile Include="String.fs" />
     </ItemGroup>
 
 </Project>

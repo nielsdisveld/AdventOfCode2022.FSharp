@@ -5,7 +5,7 @@ let file = "./input.txt"
 // Parsing
 let parseInput = FileReading.readLines
 // Package parsing
-let getSeparators (str: seq<char>) =
+let getRootList (str: seq<char>) =
     let mutable openLists = 0
     let mutable separators = [0;Seq.length str - 1]
     let mutable i = 0
@@ -16,27 +16,37 @@ let getSeparators (str: seq<char>) =
         | ',' -> if openLists = 1 then separators <- separators @ [i]
         | _ -> ()
         i <- i+1
-    separators
+    str |> String.Concat |> String.splitStringAt separators |> List.filter ((<>) "")
 let rec parsePackage (str: string) : Package =
-    if List.contains str[0] ['0';'1';'2';'3';'4';'5';'6';'7';'8';'9'] then (Value (int str))
+    if List.contains str[0] ['1';'2';'3';'4';'5';'6';'7';'8';'9'] then
+        (Value (int str))
     else 
-        let separators = getSeparators str
-        let seperated = str |> Seq.mapi (fun i c -> if List.contains i separators then '|' else c) |> String.Concat
-        let lst2 = seperated.Split '|' |> Array.toList |> List.filter ((<>) "")
-        lst2 |> List.map parsePackage |> List   
+        let lst = getRootList str
+        lst |> List.map parsePackage |> List   
 // Solving
-let solve inp =
+let solve1 inp =
     let pairs = inp |> Seq.chunkBySize 3 |> Seq.map (fun c -> parsePackage c[0], parsePackage c[1])
     let mutable correct = []
     let mutable i = 1
     for package1, package2 in pairs do
         if package1 <= package2 then correct <- i::correct
         i <- i + 1
-    correct
-// Analyzing
-let analyze = List.sum
+    correct |> List.sum
+let solve2 inp =
+    let dividers = [parsePackage "[[2]]"; parsePackage "[[6]]"]
+    let parsed = inp |> Seq.filter ((<>) "") |> Seq.map parsePackage
+    let sorted = Seq.concat [parsed; dividers] |> Seq.sort
+    let mutable correct = []
+    let mutable i = 1
+    for package in sorted do
+        if List.contains package dividers then correct <- i::correct
+        i <- i + 1
+    correct |> List.reduce (*)
 // Solutions
-let run = parseInput >> solve >> analyze
-let solution1 = run file
+let run f = parseInput >> f
+let solution1 = run solve1 file
+let solution2 = run solve2 file
 printfn $"%A{solution1}"
+printfn $"%A{solution2}"
 // Solution1: 5390
+// Solution2: 19261

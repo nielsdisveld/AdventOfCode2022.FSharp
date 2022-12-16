@@ -21,7 +21,8 @@ module Package
         override this.GetHashCode() =
             match this with
             | Value v -> hash v
-            | _ -> 1 // To do
+            | List [] -> 0
+            | List (h::t) -> h.GetHashCode () + t.GetHashCode ()
         override this.Equals other =
             match other with
             | :? Package as p -> (this.compare this p) = 0
