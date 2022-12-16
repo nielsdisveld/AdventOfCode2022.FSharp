@@ -49,7 +49,7 @@ let solve hasOneStart (inp: int list list) =
         distances <- Map.empty<int*int,int>.Add (start,0)
     else
         edges <- extraEdges inp @ edges // Add extra edges for part 2
-        distances <- Map.empty<int*int,int>.Add ((-1,-1),-1) // Set its starting distance on -1 to make up for the eventual path to be +1 longer
+        distances <- Map.empty<int*int,int>.Add ((-1,-1),-1) // Set starting distance on -1 to make up for the eventual path to be +1 longer
     
     let mutable toConsider = distances
     
