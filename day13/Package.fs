@@ -13,8 +13,9 @@ module Package
                 | List [], _ -> -1
                 | _, List [] -> 1
                 | List (h1::r1), List (h2::r2) ->
-                    if this.compare h1 h2 <> 0 then this.compare h1 h2
-                    else this.compare (List r1) (List r2)
+                    match this.compare h1 h2 with
+                    | 0 -> this.compare (List r1) (List r2)
+                    | i -> i
                 | Value v1, Value v2 -> v1 - v2
                 | Value v, List l -> this.compare (List [Value v]) (List l)
                 | List l, Value v -> this.compare (List l) (List [Value v])

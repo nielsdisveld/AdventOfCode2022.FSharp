@@ -18,7 +18,7 @@ let getRootList (str: seq<char>) =
         i <- i+1
     str |> String.Concat |> String.splitStringAt separators |> List.filter ((<>) "")
 let rec parsePackage (str: string) : Package =
-    if List.contains str[0] ['1';'2';'3';'4';'5';'6';'7';'8';'9'] then
+    if List.contains str[0] ['1'..'9'] then
         (Value (int str))
     else 
         let lst = getRootList str
