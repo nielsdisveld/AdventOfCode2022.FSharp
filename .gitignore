@@ -12,3 +12,4 @@ bin
 .fake
 .idea/
 .DS_Store
+.vscode

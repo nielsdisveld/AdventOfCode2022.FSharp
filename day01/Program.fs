@@ -1,5 +1,5 @@
 ﻿open Utils
-let file = "./inputs/1.txt"    
+let file = "./input.txt"    
 // Line parsing
 let parseLine = function
     | "" -> None
