@@ -4,13 +4,14 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
-  
-    <ItemGroup>
-        <ProjectReference Include="..\utils\utils.fsproj" />
-    </ItemGroup>
 
     <ItemGroup>
         <Compile Include="Program.fs" />
+        <Content Include="input.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\utils\utils.fsproj" />
     </ItemGroup>
 
 </Project>

@@ -36,12 +36,12 @@ let solve2 inp =
     let dividers = [parsePackage "[[2]]"; parsePackage "[[6]]"]
     let parsed = inp |> Seq.filter ((<>) "") |> Seq.map parsePackage
     let sorted = Seq.concat [parsed; dividers] |> Seq.sort
-    let mutable correct = []
+    let mutable indexes = []
     let mutable i = 1
     for package in sorted do
-        if List.contains package dividers then correct <- i::correct
+        if List.contains package dividers then indexes <- i::indexes
         i <- i + 1
-    correct |> List.reduce (*)
+    indexes |> List.reduce (*)
 // Solutions
 let run f = parseInput >> f
 let solution1 = run solve1 file
