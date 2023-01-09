@@ -1,12 +1,10 @@
 ﻿open Utils
 let file = "./input.txt"
-// Types
-type Coordinate = int*int
 // Helpers
 let generateArray n1 n2 = if n1 <= n2 then [|n1..n2|] else [|n2..n1|]
 let add c p = c |> Set.add p
 // Parsing
-let parseCoordinate (str: string) : Coordinate =
+let parseCoordinate (str: string)  =
     match str.Split ',' with
     | [|x;y|] -> (int x,int y)
     | _ -> failwith "Incorrect input %s{str}"
