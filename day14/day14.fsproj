@@ -7,11 +7,14 @@
 
     <ItemGroup>
         <Compile Include="Program.fs" />
-        <Content Include="input.txt" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\utils\utils.fsproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="bin\Debug\net6.0" />
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 namespace Utils
 
 module Seq =
-    let append seq s = Seq.append seq (Seq.singleton s)
+    let add seq s = Seq.append seq (Seq.singleton s)
     let zipzip seq1 seq2 = Seq.zip seq1 seq2 |> Seq.map (fun (a,b) -> Seq.zip a b)
     let map4 f seq1 seq2 seq3 seq4 : seq<seq<_>>=
         zipzip (zipzip seq1 seq2) (zipzip seq3 seq4)
