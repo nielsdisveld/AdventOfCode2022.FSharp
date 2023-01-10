@@ -1,7 +1,7 @@
 ﻿open Utils
 let file = "./input.txt"
 // Types
-type Caves = Map<int,Set<int>> // keys are x coordinates, a value is all possible y values for an x
+type Caves = Map<int,Set<int>> // keys are x coordinates, a value is the set of all possible y values for an x
 // Helpers
 let generateArray n1 n2 = if n1 <= n2 then [|n1..n2|] else [|n2..n1|]
 let addCave (m: Caves) (x,y) =
