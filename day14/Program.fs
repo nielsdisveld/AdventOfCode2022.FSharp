@@ -34,19 +34,18 @@ let transformInput =
     Seq.map (fun (k,l) -> k, Seq.map snd l |> set) >>
     Map.ofSeq
 // Solving
-let source = (500,0)
 let dropSandUnit hasFloor floor (caves: Caves) =
     let rec loop (x0,y0) =
         [|x0,y0+1;x0-1,y0+1;x0+1,y0+1|]
         |> Seq.tryFind (fun cave -> not (contains cave caves))
         |> function
-            | None when (x0,y0) = source -> addCave caves source, false
+            | None when (x0,y0) = (500,0) -> addCave caves (500,0), false
             | None -> addCave caves (x0,y0), true
             | Some (x,y) ->
                 if not hasFloor && y = (floor + 1) then caves, false
                 elif y = (floor + 1) then addCave caves (x,y), true
                 else loop (x,y)
-    loop source
+    loop (500,0)
 let dropSandStream hasFloor (rocks: Caves) = 
     let floor = rocks.Values |> Seq.collect id |> Seq.max
     let rec loop sand =
