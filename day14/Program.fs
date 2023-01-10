@@ -21,7 +21,7 @@ let parseCoordinate (str: string)  =
     | _ -> failwith "Incorrect input %s{str}"
 let drawPath (x1,y1) (x2,y2) =
     if x1 = x2 then generateArray y1 y2 |> Array.map (fun y -> x1,y)
-    else  generateArray x1 x2 |> Array.map (fun x -> x,y1)
+    else generateArray x1 x2 |> Array.map (fun x -> x,y1)
 let parseLine (str: string) = 
     str.Split " -> "
     |> Array.map parseCoordinate
@@ -38,7 +38,7 @@ let source = (500,0)
 let dropSandUnit hasFloor floor (caves: Caves) =
     let rec loop (x0,y0) =
         [|x0,y0+1;x0-1,y0+1;x0+1,y0+1|]
-        |> Seq.tryFind (fun (x,y) -> not (contains (x,y) caves))
+        |> Seq.tryFind (fun cave -> not (contains cave caves))
         |> function
             | None when (x0,y0) = source -> addCave caves source, false
             | None -> addCave caves (x0,y0), true
