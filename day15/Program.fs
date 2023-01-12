@@ -1,13 +1,7 @@
 ﻿open Utils
 let file = "./input.txt"
 // Helpers
-let contains x (i1,i2) = (x >= i1) && (x <= i2)
-let rec findNotCovered intervals =
-    let rec loop x  =
-        match List.tryFind (contains x) intervals with
-        | Some (_,i2) -> loop (i2+1)
-        | None -> x
-    loop 0
+let isInInterval x (i1,i2) = (x >= i1) && (x <= i2)
 let manhattanDist (x1,y1) (x2,y2) = abs (x2-x1) + abs (y2-y1)
 // Parsing
 let intPrecedingChar (c: char) (str: string) = str.Split c |> Array.head |> int
@@ -21,6 +15,12 @@ let transformInput input =
     |> Seq.map parseLine
     |> (Seq.map (fun (s,b) -> s, manhattanDist s b))
 // Solving
+let findNotCovered intervals =
+    let rec loop x  =
+        match intervals |> List.tryFind (isInInterval x) with
+        | Some (_,i2) -> loop (i2+1)
+        | None -> x
+    loop 0
 let getCover y0 ((sx,sy),d) =
     let dx = d - (abs (sy - y0))
     if dx < 0 then []
@@ -36,12 +36,12 @@ let solve_y inp y =
     |> function
         | n when n <= 4000000 -> Some (n, y) // return x,y coordinate of point not covered
         | _ -> None
-let solve y_min y_max inp =
+let solve (y_min,y_max) inp =
     [|y_min..y_max|]
     |> Array.tryPick (solve_y inp)
 let solveParallel inp =
     [|0..3|]
-    |> Array.map (fun i -> async {return solve (i*1000000) ((i+1)*1000000) inp})
+    |> Array.map (fun i -> async {return solve (i*1000000,(i+1)*1000000) inp})
     |> Async.Choice
     |> Async.StartAsTask
     |> fun task -> task.Result
