@@ -54,5 +54,3 @@ let outcome = PerformanceTesting.timeOperation run
 printfn $"Solution1: %A{outcome}"
 // Solution1: 5127797
 // Solution2: 12518502636475L speed: ~58.6s
-// 49.822100
-// 68.260400
