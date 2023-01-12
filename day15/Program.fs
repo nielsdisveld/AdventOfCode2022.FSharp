@@ -1,5 +1,4 @@
-﻿open System.Diagnostics
-open Utils
+﻿open Utils
 let file = "./input.txt"
 // Helpers
 let isInInterval x (i1,i2) = (x >= i1) && (x <= i2)
