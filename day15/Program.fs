@@ -1,4 +1,5 @@
-﻿open Utils
+﻿open System.Diagnostics
+open Utils
 let file = "./input.txt"
 // Helpers
 let isInInterval x (i1,i2) = (x >= i1) && (x <= i2)
@@ -16,7 +17,7 @@ let transformInput input =
     |> (Seq.map (fun (s,b) -> s, manhattanDist s b))
 // Solving
 let findNotCovered intervals =
-    let rec loop x  =
+    let rec loop x = 
         match intervals |> List.tryFind (isInInterval x) with
         | Some (_,i2) -> loop (i2+1)
         | None -> x
@@ -49,8 +50,10 @@ let solveParallel inp =
 let analyze = function
     | Some (x,y) -> 4000000L*(int64 x) + (int64 y)
     | None -> failwith "Point not found"
-let run = file |> FileReading.readLines |> transformInput |> solveParallel |> analyze
-let solution2 = run
-printfn $"Solution1: %A{solution2}"
+let run () = file |> FileReading.readLines |> transformInput |> solveParallel |> analyze
+let outcome = PerformanceTesting.timeOperation run
+printfn $"Solution1: %A{outcome}"
 // Solution1: 5127797
 // Solution2: 12518502636475L speed: ~58.6s
+// 49.822100
+// 68.260400

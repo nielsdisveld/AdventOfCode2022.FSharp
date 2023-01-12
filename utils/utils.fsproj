@@ -11,6 +11,7 @@
         <Compile Include="Parsing.fs" />
         <Compile Include="Seq.fs" />
         <Compile Include="String.fs" />
+        <Compile Include="PerformanceTesting.fs" />
     </ItemGroup>
 
 </Project>
