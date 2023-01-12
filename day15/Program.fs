@@ -4,16 +4,14 @@ let file = "./input.txt"
 let isInInterval x (i1,i2) = (x >= i1) && (x <= i2)
 let manhattanDist (x1,y1) (x2,y2) = abs (x2-x1) + abs (y2-y1)
 // Parsing
-let intPrecedingChar (c: char) (str: string) = str.Split c |> Array.head |> int
 let parseLine (str: string) =
-    match str.Split '=' with
-    | [|_;x1;y1;x2;y2|] ->
-        (intPrecedingChar ',' x1, intPrecedingChar ':' y1), (intPrecedingChar ',' x2, int y2)
+    match str.Split [|'='; ','; ':'|] with
+    | [|_;x1;_;y1;_;x2;_;y2|] -> (int x1, int y1), (int x2, int y2)
     | _ -> failwith $"Incorrect line: %A{str}"
 let transformInput input =
     input
     |> Seq.map parseLine
-    |> (Seq.map (fun (s,b) -> s, manhattanDist s b))
+    |> Seq.map (fun (s,b) -> s, manhattanDist s b)
 // Solving
 let findNotCovered intervals =
     let rec loop x = 
