@@ -1,7 +1,14 @@
-﻿open Utils
+open Utils
 let file = "./input.txt"
+// Types
+// Line segment is defined by starting point, slope (can only be 1 or -1 in this scope) and length
+type LineSegment = (int * int) * int * int
 // Helpers
-let isInInterval x (i1,i2) = (x >= i1) && (x <= i2)
+let cartesian xs ys = xs |> Seq.collect (fun x -> ys |> Seq.map (fun y -> x,y))
+let filterIsSomeFolder lst opt =
+    match opt with
+    | Some v -> v::lst
+    | None -> lst
 let manhattanDist (x1,y1) (x2,y2) = abs (x2-x1) + abs (y2-y1)
 // Parsing
 let parseLine (str: string) =
@@ -12,43 +19,39 @@ let transformInput input =
     input
     |> Seq.map parseLine
     |> Seq.map (fun (s,b) -> s, manhattanDist s b)
+// Line intersections
+let intersectDescAsc (((x1,y1),_,d1): LineSegment)  (((x2,y2),_,d2): LineSegment) =
+    match x1+y1+x2-y2 with // Basically follows from solving this equality: -(x-x1)+y1=(x-x2)+y2
+    | x' when
+        (x' % 2) = 0 && // If x' is odd then there is no integer solution
+        x'/2>=x1 && x'/2<=(x1+d1) && x'/2>=x2 && x'/2<=x2+d2 -> Some (x'/2, y1-(x'/2-x1))
+    | _ -> None
+let rec intersection ((p1,slope1,d1): LineSegment, (p2,slope2,d2): LineSegment) =
+    match slope1,slope2 with
+    | -1,1 -> intersectDescAsc (p1,slope1,d1) (p2,slope2,d2)
+    | 1,-1 -> intersectDescAsc (p2,slope2,d2) (p1,slope1,d1)
+    | _ -> None
+let toBoundaries ((x,y), d') : LineSegment[] = // Get line segments that define the boundary of what a sensor is covering
+    let d = d'+1
+    [|(x-d,y),1,d; (x,y+d),-1,d; (x-d,y),-1,d; (x,y-d),1,d;|]
 // Solving
-let findNotCovered intervals =
-    let rec loop x = 
-        match intervals |> List.tryFind (isInInterval x) with
-        | Some (_,i2) -> loop (i2+1)
-        | None -> x
-    loop 0
-let getCover y0 ((sx,sy),d) =
-    let dx = d - (abs (sy - y0))
-    if dx < 0 then []
-    else List.singleton (max 0 (sx-dx),min 4000000 (sx + dx))
-let getCovers y0 inp =
-    inp
-    |> Seq.map (getCover y0)
-    |> Seq.reduce List.append
-let solve_y inp y =
-    inp 
-    |> getCovers y
-    |> findNotCovered
-    |> function
-        | n when n <= 4000000 -> Some (n, y) // return x,y coordinate of point not covered
-        | _ -> None
-let solve (y_min,y_max) inp =
-    [|y_min..y_max|]
-    |> Array.tryPick (solve_y inp)
-let solveParallel inp =
-    [|0..3|]
-    |> Array.map (fun i -> async {return solve (i*1000000,(i+1)*1000000) inp})
-    |> Async.Choice
-    |> Async.StartAsTask
-    |> fun task -> task.Result
-// Solutions
 let analyze = function
     | Some (x,y) -> 4000000L*(int64 x) + (int64 y)
     | None -> failwith "Point not found"
-let run () = file |> FileReading.readLines |> transformInput |> solveParallel |> analyze
-let outcome = PerformanceTesting.timeOperation run
-printfn $"Solution1: %A{outcome}"
-// Solution1: 5127797
-// Solution2: 12518502636475L speed: ~58.6s
+let allBoundaryIntersections (sensors: seq<(int*int)*int>) =
+    sensors
+    |> Seq.map toBoundaries // Map every sensor to its boundary
+    |> fun xs -> cartesian xs xs // Map to every combination of 2 boundaries
+    |> Seq.map (fun (x,y) -> cartesian x y) // Map to every combination of 2 line segments
+    |> Seq.collect (Seq.map intersection) // Collect every possible intersection point of 2 boundaries
+    |> Seq.fold filterIsSomeFolder []
+let solution =
+    let sensors = file |> FileReading.readLines |> transformInput
+    sensors
+    |> allBoundaryIntersections
+    |> List.tryFind (fun (x,y) ->
+        x>=0&&x<=4000000&&y>=0&&y<=4000000 &&
+        sensors|> Seq.forall (fun (s,d) -> manhattanDist (x,y) s > d)) // Find (x,y) that is outside every sensor cover
+    |> analyze
+printfn $"%A{solution}"
+// solution: 12518502636475
