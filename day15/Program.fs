@@ -40,8 +40,8 @@ let allBoundaryIntersections (sensors: seq<(int*int)*int>) =
 let findUncovered (sensors, intersections) =
     intersections
     |> Seq.find (fun (x,y) ->
-    x>=0&&x<=4000000&&y>=0&&y<=4000000 &&
-    sensors |> Seq.forall (fun (s,d) -> manhattanDist (x,y) s > d)) // Uncovered point is outside every sensor range
+        x>=0&&x<=4000000&&y>=0&&y<=4000000 &&
+        sensors |> Seq.forall (fun (s,d) -> manhattanDist (x,y) s > d)) // Uncovered point is outside every sensor range
 let solution =
     file
     |> FileReading.readLines
