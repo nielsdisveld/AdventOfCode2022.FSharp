@@ -2,11 +2,9 @@
 let file = "./input.txt"
 // Input parsing
 let parseLine (str: string) =
-    str.Split ','
-    |> Array.map (fun s -> s.Split '-')
-    |> function
-        | [|[|i1;i2|];[|i3;i4|]|] -> ((int i1,int i2),(int i3,int i4))
-        | x -> failwith $"Invalid line input: %A{x}"
+    match str.Split [|',';'-'|] with
+    | [|i1;i2;i3;i4|] -> ((int i1,int i2),(int i3,int i4))
+    | _ -> failwith $"Invalid line input: %s{str}" 
 // Interval check helpers
 let containsOther ((i1,i2),(i3,i4)) = (i1 <= i3 && i2>=i4) || (i1 >= i3 && i2<=i4)
 let hasNoOverlap ((i1,i2),(i3,i4)) = i2 < i3 || i1 > i4

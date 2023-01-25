@@ -6,7 +6,7 @@ let parseChar = function
     | 'B' | 'Y' -> 2
     | 'C' | 'Z' -> 3
     | x -> failwith $"Invalid character input %A{x}"
-let determineP2Response = function
+let p2Response = function
     | 'A', 'X' | 'C', 'Y' | 'B', 'Z' -> 3
     | 'B', 'X' | 'A', 'Y' | 'C', 'Z' -> 1
     | 'C', 'X' | 'B', 'Y' | 'A', 'Z' -> 2
@@ -26,7 +26,7 @@ let scoreLine (p1,p2) = roundScore (p1,p2)  + p2
 let analyze = Seq.map scoreLine >> Seq.sum
 let run secondColParser = FileReading.readLines >> Seq.map (Seq.toArray >> parseLine secondColParser) >> analyze
 let solution1 = run (snd >> parseChar) file
-let solution2 = run determineP2Response file
+let solution2 = run p2Response file
 
 printfn $"Solution 1: Total score for player 2: %i{solution1}"
 printfn $"Solution 2: Total score for player 2: %i{solution2}"

@@ -17,7 +17,7 @@ let parseLine (str: string) : Line =
     match str.Split ' ' |> Array.toList with
     | "$"::xs -> parseCommand xs |> Line.Command
     | ["dir";d] -> Dir d
-    | [s;f] -> File (int64 s)
+    | [s;_] -> File (int64 s)
     | x -> failwith $"Invalid line %A{x}"
 let parseInput = FileReading.readLines >> Seq.map parseLine
 // Helpers functions
