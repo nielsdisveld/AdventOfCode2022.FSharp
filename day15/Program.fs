@@ -9,7 +9,7 @@ let manhattanDist (x1,y1) (x2,y2) = abs (x2-x1) + abs (y2-y1)
 let parseLine (str: string) =
     match str.Split [|'='; ','; ':'|] with
     | [|_;x1;_;y1;_;x2;_;y2|] -> (int x1, int y1), (int x2, int y2)
-    | _ -> failwith $"Incorrect line: %A{str}"
+    | _ -> failwith $"Incorrect line: %s{str}"
 let transformInput input =
     input
     |> Seq.map parseLine
@@ -21,7 +21,7 @@ let intersectDescAsc (((x1,y1),_,d1): LineSegment)  (((x2,y2),_,d2): LineSegment
         (x' % 2) = 0 && // If x' is odd then there is no integer solution
         x'/2>=x1 && x'/2<=(x1+d1) && x'/2>=x2 && x'/2<=x2+d2 -> [(x'/2, y1-(x'/2-x1))]
     | _ -> []
-let rec intersection ((p1,slope1,d1): LineSegment, (p2,slope2,d2): LineSegment) =
+let intersection ((p1,slope1,d1): LineSegment, (p2,slope2,d2): LineSegment) =
     match slope1,slope2 with
     | -1,1 -> intersectDescAsc (p1,slope1,d1) (p2,slope2,d2)
     | 1,-1 -> intersectDescAsc (p2,slope2,d2) (p1,slope1,d1)
