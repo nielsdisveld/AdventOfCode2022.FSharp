@@ -1,22 +1,12 @@
 ﻿open Utils
 let file = "./input.txt"    
-// Line parsing
-let parseLine = function
-    | "" -> None
-    | x -> Some (int x)
-let folder (state: list<list<int>>) (intOpt: int option) : list<list<int>> =
-    match state, intOpt with
-    | [], None -> []
-    | t, None -> []::t
-    | [], Some i -> [[i]]
-    | h::t, Some i -> (i::h)::t
 // Scoring
-let score1 = List.head
-let score2 (calories: int list) = calories[0..2] |> List.sum
+let score1 = Seq.head
+let score2 (calories: seq<int>) = (Seq.item 0 calories) + (Seq.item 1 calories) + (Seq.item 2 calories)
 //Solution
-let parseInput = FileReading.readLines >> Seq.map parseLine >> Seq.toList
-let analyze score = List.map List.sum >> List.sortDescending >> score
-let run f = parseInput >> List.fold folder [] >> analyze f
+let parseInput = FileReading.readLines >> Seq.splitAt (fun line -> line = "") >> Seq.map (Seq.map int)
+let analyze score = Seq.map Seq.sum >> Seq.sortDescending >> score
+let run f = parseInput >> analyze f
 let solution1 = run score1 file
 let solution2 = run score2 file
 printfn $"Highest amount of calories is %i{solution1}"

@@ -9,9 +9,9 @@ module Seq =
     let actOnRev f = Seq.rev >>  f >> Seq.rev
     let actOnTranspose f = Seq.transpose >> f >> Seq.transpose
     let pointWise f (inp: seq<seq<_>>) = inp |> Seq.map2 (Seq.map2 f)
-    let splitBy f (inp: seq<_>) =
+    let splitBy predicate (inp: seq<_>) =
         let split = inp
-                    |> Seq.groupBy f
+                    |> Seq.groupBy predicate
         let pos = split // Entries which were valuated positively by f
                   |> Seq.tryFind fst
                   |> Option.map snd
@@ -25,3 +25,13 @@ module Seq =
         let y = inp |> Seq.findIndex (Seq.contains v)
         let x = Seq.item y inp |> Seq.findIndex (fun item -> v = item)
         (x,y)
+    let splitAt predicate (inp: seq<_>) =
+        let folder acc element =
+            match acc, predicate element with
+            | [], true -> []
+            | acc', true -> []::acc'
+            | [], false -> [[element]]
+            | h::t, false -> (element::h)::t
+        inp
+        |> Seq.rev
+        |> Seq.fold folder [] 
